@@ -2,22 +2,27 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Cotação do Cacau Hoje | Mercado Atualizado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P.N.E.T.V | Cotação do Cacau Hoje</title>
 
-  <meta name="description" content="Acompanhe a cotação atualizada do cacau em tempo real. Dados confiáveis do Mercado do Cacau.">
+  <meta name="description" content="Site informativo criado por PNETV — Pensar, Notar, Estudar, Transmitir, Viver. Dados obtidos do portal Mercado do Cacau.">
+  <meta name="author" content="PNETV">
+  <meta name="keywords" content="pnetv, cotação do cacau, preço do cacau, proverbios 16:3, projeto informativo, pensar notar estudar transmitir viver">
   <link rel="icon" href="favicon.png">
+  <link rel="preconnect" href="https://mercadodocacau.com.br">
 
   <style>
     :root {
       color-scheme: light dark;
       --verde: #4CAF50;
       --verde-escuro: #2E7D32;
+      --fundo-claro: #f9fafb;
+      --fundo-escuro: #181a1b;
     }
 
     body {
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #f4f5f7;
+      background: linear-gradient(180deg, var(--fundo-claro), #eef2f3);
       color: #222;
       margin: 0;
       padding: 20px;
@@ -30,7 +35,7 @@
 
     @media (prefers-color-scheme: dark) {
       body {
-        background-color: #181a1b;
+        background: var(--fundo-escuro);
         color: #e0e0e0;
       }
       .container {
@@ -51,12 +56,18 @@
       width: 100%;
       text-align: center;
       transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
       margin: 0 0 10px;
       font-size: 1.8em;
-      color: #2e2e2e;
+      color: var(--verde-escuro);
     }
 
     p {
@@ -76,8 +87,7 @@
       cursor: pointer;
       transition: all 0.2s ease-in-out;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      margin-bottom: 16px;
-      touch-action: manipulation;
+      margin-bottom: 12px;
     }
 
     .btn:hover, .btn:active {
@@ -91,13 +101,20 @@
       gap: 12px;
       align-items:center;
       flex-wrap:wrap;
-      margin-bottom:18px;
+      margin-bottom:10px;
     }
 
     .meta-line .updated {
       color: var(--verde-escuro);
       font-weight:600;
       font-size: 0.95em;
+    }
+
+    #status {
+      color: var(--verde-escuro);
+      font-weight: 600;
+      margin-bottom: 10px;
+      min-height: 22px;
     }
 
     .iframe-card {
@@ -143,13 +160,41 @@
     }
 
     footer {
-      margin-top: 20px;
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      text-align: left;
       font-size: 0.9em;
       color: #777;
-      word-break: break-word;
+      gap: 20px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      padding-top: 15px;
     }
 
-    /* ✨ Efeito de brilho animado no nome PNETV */
+    .footer-left, .footer-right {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .versiculo {
+      font-style: italic;
+      color: #555;
+      font-size: 0.9em;
+      margin: 0;
+    }
+
+    .referencia {
+      margin-top: 5px;
+      color: #777;
+      font-size: 0.85em;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
     .brilho {
       background: linear-gradient(90deg, #2E7D32, #4CAF50, #A5D6A7, #4CAF50, #2E7D32);
       background-size: 300%;
@@ -165,7 +210,17 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* 📱 Responsividade */
+    .significado {
+      font-size: 0.9em;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .criador {
+      font-weight: bold;
+      color: var(--verde-escuro);
+    }
+
     @media (max-width: 600px) {
       body { padding: 10px; }
       .container { padding: 20px 15px; }
@@ -173,18 +228,22 @@
       h1 { font-size: 1.5em; }
       .btn { padding: 10px 20px; font-size: 15px; }
       .meta-line { flex-direction: column; gap: 6px; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-right { text-align: center; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>📈 Cotação do Cacau Hoje</h1>
-    <p>Dados atualizados diretamente do Mercado do Cacau</p>
+    <p>Site informativo criado por <strong class="brilho">PNETV</strong>.</p>
 
     <div class="meta-line">
-      <div class="updated">🕒 Atualizado em: <span id="data">--:--:--</span></div>
+      <div class="updated">🕒 Última atualização: <span id="data">--:--:--</span></div>
       <button class="btn" id="btnAtualizar" aria-label="Atualizar cotação">🔄 Atualizar Cotação</button>
     </div>
+
+    <p id="status"></p>
 
     <div class="iframe-card" aria-live="polite">
       <div class="loader" id="loader" role="status" aria-hidden="false" title="Carregando"></div>
@@ -200,13 +259,21 @@
     </div>
 
     <footer>
-      Fonte oficial: <strong>mercadodocacau.com.br</strong><br>
-      Criado por <strong class="brilho">PNETV</strong> © <span id="ano"></span>
+      <div class="footer-left">
+        <p class="versiculo">“Confia ao Senhor as tuas obras, e teus pensamentos serão estabelecidos.”</p>
+        <p class="referencia">📖 Provérbios 16:3</p>
+      </div>
+
+      <div class="footer-right">
+        <p class="criador">Criado por <span class="brilho">PNETV</span></p>
+        <p class="significado"><strong>P.N.E.T.V</strong> — Pensar, Notar, Estudar, Transmitir, Viver</p>
+        <p>© <span id="ano"></span></p>
+      </div>
     </footer>
   </div>
 
   <script>
-    // Atualiza a hora em tempo real
+    // Atualiza hora em tempo real
     (function startClock() {
       const el = document.getElementById('data');
       function update() {
@@ -219,35 +286,34 @@
       setInterval(update, 1000);
     })();
 
-    // Mostra o ano atual no rodapé
     document.getElementById("ano").textContent = new Date().getFullYear();
 
-    // Funções do iframe e loader
     const iframe = document.getElementById('cotacao');
     const loader = document.getElementById('loader');
     const btn = document.getElementById('btnAtualizar');
+    const statusEl = document.getElementById('status');
+    let busy = false;
 
     function onIframeLoad() {
       loader.style.display = 'none';
       iframe.style.opacity = '1';
+      const hora = new Date().toLocaleTimeString("pt-BR", { hour12: false });
+      statusEl.textContent = "✅ Cotação atualizada às " + hora;
     }
 
     function reloadIframe() {
+      if (busy) return;
+      busy = true;
       const base = iframe.getAttribute('data-src') || iframe.src;
       loader.style.display = 'block';
       iframe.style.opacity = '0';
+      statusEl.textContent = "🔄 Atualizando cotação...";
       iframe.src = base + (base.includes('?') ? '&' : '?') + 't=' + Date.now();
+      setTimeout(() => busy = false, 2500);
     }
 
-    let busy = false;
-    btn.addEventListener('click', function() {
-      if (busy) return;
-      busy = true;
-      reloadIframe();
-      setTimeout(() => busy = false, 2500);
-    });
+    btn.addEventListener('click', reloadIframe);
 
-    // Caso o iframe já tenha carregado antes do JS
     if (iframe.complete) {
       setTimeout(() => {
         loader.style.display = 'none';
