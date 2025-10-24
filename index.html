@@ -115,8 +115,21 @@
     #status {
       color: var(--verde-escuro);
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       min-height: 22px;
+    }
+
+    #fonteStatus {
+      font-size: 0.9em;
+      color: #333;
+      margin-bottom: 8px;
+      display: none;
+    }
+
+    #autoInfo {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 15px;
     }
 
     .iframe-card {
@@ -248,6 +261,8 @@
     </div>
 
     <p id="status"></p>
+    <p id="fonteStatus">📊 Fonte: Mercado do Cacau</p>
+    <p id="autoInfo">⏱ Atualização automática a cada 5 minutos.</p>
 
     <div class="iframe-card" aria-live="polite">
       <div class="loader" id="loader" role="status" aria-hidden="false" title="Carregando"></div>
@@ -272,6 +287,7 @@
         <p class="criador">Criado por <span class="brilho">PNETV</span></p>
         <p class="significado"><strong>P.N.E.T.V</strong> — Pensar, Notar, Estudar, Transmitir, Viver</p>
         <p>© <span id="ano"></span></p>
+        <p class="fonte">📊 Dados atualizados via <strong>Mercado do Cacau</strong></p>
       </div>
     </footer>
   </div>
@@ -293,6 +309,8 @@
     const loader = document.getElementById('loader');
     const btn = document.getElementById('btnAtualizar');
     const statusEl = document.getElementById('status');
+    const fonteEl = document.getElementById('fonteStatus');
+    const autoInfoEl = document.getElementById('autoInfo');
     let busy = false;
 
     function onIframeLoad() {
@@ -300,20 +318,31 @@
       iframe.style.opacity = '1';
       const hora = new Date().toLocaleTimeString("pt-BR", { hour12: false });
       statusEl.textContent = "✅ Cotação atualizada às " + hora;
+      fonteEl.style.display = 'block';
+      autoInfoEl.textContent = "⏱ Atualização automática a cada 5 minutos (última às " + hora + ")";
     }
 
     function reloadIframe() {
       if (busy) return;
       busy = true;
-      const base = iframe.getAttribute('data-src') || iframe.src;
+      fonteEl.style.display = 'none';
+      statusEl.textContent = "🔄 Atualizando cotação...";
       loader.style.display = 'block';
       iframe.style.opacity = '0';
-      statusEl.textContent = "🔄 Atualizando cotação...";
-      iframe.src = base + (base.includes('?') ? '&' : '?') + 't=' + Date.now();
+
+      setTimeout(() => {
+        statusEl.textContent = "⏳ Buscando dados no Mercado do Cacau...";
+        const base = iframe.getAttribute('data-src') || iframe.src;
+        iframe.src = base + (base.includes('?') ? '&' : '?') + 't=' + Date.now();
+      }, 1000);
+
       setTimeout(() => busy = false, 2500);
     }
 
     btn.addEventListener('click', reloadIframe);
+
+    // Atualização automática a cada 5 minutos (300000 ms)
+    setInterval(reloadIframe, 300000);
   </script>
 </body>
 </html>
